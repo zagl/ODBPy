@@ -82,8 +82,11 @@ class LayerType(Enum):
     Document = 8
     Mixed = 9 # Mixed plane & signal
     Mask = 10 # GenFlex additional information
-    
-_layer_type_map = { # See ODB++ 7.0 spec page 38
+    PowerGround = 11
+    ConductivePaste = 12
+    Dielectric = 13
+
+_layer_type_map = { # See ODB++ 8.0 spec page 45
     "COMPONENT": LayerType.Component,
     "SILK_SCREEN": LayerType.SilkScreen,
     "SOLDER_PASTE": LayerType.SolderPaste,
@@ -93,7 +96,10 @@ _layer_type_map = { # See ODB++ 7.0 spec page 38
     "ROUT": LayerType.Route,
     "DOCUMENT": LayerType.Document,
     "MIXED": LayerType.Mixed,
-    "MASK": LayerType.Mask
+    "MASK": LayerType.Mask,
+    "POWER_GROUND": LayerType.PowerGround,
+    "CONDUCTIVE_PASTE": LayerType.ConductivePaste,
+    "DIELECTRIC": LayerType.Dielectric,
 }
 
 def parse_layers(matrix):
@@ -117,11 +123,11 @@ def read_layers(directory):
 
 def read_layer_components(directory, layer):
     return read_linerecords(os.path.join(
-        directory, "steps", "pcb", "layers", layer, "components.Z"))
+        directory, "steps", "pcb", "layers", layer, "components"))
 
 def read_layer_features(directory, layer):
     return read_linerecords(os.path.join(
-        directory, "steps", "pcb", "layers", layer, "features.Z"))
+        directory, "steps", "pcb", "layers", layer, "features"))
 
 
 if __name__ == "__main__":
