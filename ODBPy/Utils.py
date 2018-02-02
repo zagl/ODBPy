@@ -28,8 +28,12 @@ def readFileLines(filepath, open_fn=open):
     try: # Assume file-like object
         return [l.strip() for l in filepath.read().split("\n")]
     except AttributeError:
-        with open_fn(filepath) as fin:
-            return [l.strip() for l in fin.read().split("\n")]
+        try:
+            with open_fn(filepath) as fin:
+                return [l.strip() for l in fin.read().split("\n")]
+        except UnicodeDecodeError:
+            with open_fn(filepath, encoding='latin-1') as fin:
+                return [l.strip() for l in fin.read().split("\n")]
 
 def readGZIPFileLines(filepath):
     "Get stripped lines of a given file in gzip format"
