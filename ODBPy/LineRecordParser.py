@@ -33,6 +33,8 @@ def group_by_section(lines):
         if line.startswith("#"):
             name = line.strip("#").strip()
         else:
+            if name is None:
+                name = "Header"
             groups[name].append(line)
     return dict(groups)
 

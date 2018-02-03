@@ -7,20 +7,30 @@ import re
 
 __all__ = ["linerecords_unit", "to_mm", "to_mil", "to_micrometers", "to_inch"]
 
-_unit_line_re = re.compile(r"U\s+([A-Z]+)")
+_unit_line_re = re.compile(r"UNITS=([A-Z]+)")
+_unit_line_v7_re = re.compile(r"U\s+([A-Z]+)")
 
 def linerecords_unit(linerecords):
     """
     Given a linerecord dictionary, extract the unit string
     """
-    unit_lines = linerecords["Units"]
-    if len(unit_lines) != 1:
-        raise ValueError("More than one unit line: {}".format(unit_lines))
-    # Try to match regex
-    match = _unit_line_re.match(unit_lines[0])
-    if match is None:
-        raise ValueError("Invalid unit line: {}".format(unit_lines[0]))
-    return match.group(1)
+    if "Header" in linerecords: # post V8.0
+        header_lines = linerecords["Header"]
+        # Try to match regex
+        match = _unit_line_re.match(header_lines[0])
+        if match is None:
+            raise ValueError("Invalid unit line: {}".format(unit_lines[0]))
+        return match.group(1)
+
+    elif "Units" in linerecords: # pre v8.0
+        unit_lines = linerecords["Units"]
+        if len(unit_lines) != 1:
+            raise ValueError("More than one unit line: {}".format(unit_lines))
+        # Try to match regex
+        match = _unit_line_v7_re.match(unit_lines[0])
+        if match is None:
+            raise ValueError("Invalid unit line: {}".format(unit_lines[0]))
+        return match.group(1)
 
 _mm_factors = {
     "MM": 1.0,

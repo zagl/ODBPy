@@ -8,6 +8,8 @@ from collections import namedtuple
 from .Decoder import DecoderOption, run_decoder
 from .Structures import *
 from .Utils import try_parse_number
+from .Attributes import parse_attributes
+
 
 __all__ = ["components_decoder_options", "parse_components",
            "consolidate_component_tags", "Component", "map_components_by_name"]
@@ -98,7 +100,7 @@ def parse_components(components):
     return {
         component_name_to_id(name): consolidate_component_tags(
             list(run_decoder(component, components_decoder_options)))
-        for name, component in components.items()
+        for name, component in components.items() if name != "Header"
     }
 
 def map_components_by_name(components):
