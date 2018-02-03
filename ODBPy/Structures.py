@@ -8,7 +8,7 @@ from enum import Enum
 import numbers
 
 __all__ = ["Point", "Polarity", "polarity_map", "Mirror",
-           "mirror_map", "HolePlating", "SymbolReference"]
+           "mirror_map", "HolePlating", "SymbolReference", "CircleDirection"]
 
 # Named tuples
 class Point(namedtuple("Point", ["x", "y"])):
@@ -64,6 +64,16 @@ class Mirror(Enum):
 mirror_map = {
     "N": Mirror.No,
     "M": Mirror.Mirror
+}
+
+class CircleDirection(Enum):
+    """Direction of a circle"""
+    Clockwise = 1
+    CounterClockwise = 2
+
+circle_direction_map = {
+    "Y": CircleDirection.Clockwise,
+    "N": CircleDirection.CounterClockwise
 }
 
 class HolePlating(Enum):

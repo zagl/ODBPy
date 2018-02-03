@@ -6,13 +6,13 @@ ODB++ polygon parser components
 import re
 from collections import namedtuple
 from enum import Enum
-from .Structures import Point
+from .Structures import Point, circle_direction_map
 from .Decoder import DecoderOption
 from .Treeifier import TreeifierRule
 
 __all__ = ["Polygon", "PolygonSegment", "PolygonCircle",
            "PolygonBeginTag", "PolygonSegmentTag", "PolygonCircleTag", "PolygonEndTag",
-           "PolygonType", "CircleDirection", "polygon_decoder_options",
+           "PolygonType", "polygon_decoder_options",
            "polygon_treeify_rules"]
 
 # Polygon steps consist of PolygonSegment and PolygonCircle objects
@@ -51,16 +51,6 @@ _polygon_type_map = {
     "H": PolygonType.Hole
 }
 
-class CircleDirection(Enum):
-    """Direction of a circle in a polygon"""
-    Clockwise = 1
-    CounterClockwise = 2
-    
-_circle_direction_map = {
-    "Y": CircleDirection.Clockwise,
-    "N": CircleDirection.CounterClockwise
-}
-
 # Regular expressions for contour syntax
 _ob_re = re.compile(r"^OB\s+(-?[\.\d]+)\s+(-?[\.\d]+)\s+([IH])")
 _os_re = re.compile(r"^OS\s+(-?[\.\d]+)\s+(-?[\.\d]+)")
@@ -77,7 +67,7 @@ def _parse_oc(match):
     xe, ye, xc, yc, cw = match.groups()
     return PolygonCircleTag(Point(float(xe), float(ye)),
                             Point(float(xc), float(yc)),
-                            _circle_direction_map[cw])
+                            circle_direction_map[cw])
 
 def _parse_oe(match):
     "Parse a polynom end tag regex match"
