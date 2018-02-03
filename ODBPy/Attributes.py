@@ -3,6 +3,7 @@
 """
 ODB++ attribute parser
 """
+import re
 
 __all__ = ["parse_attributes_from_line",
            "parse_attributes"]
@@ -29,13 +30,13 @@ def parse_attributes(attribute_str):
         parse_attributes("0=0,2=0") => {0: 0, 2: 0}
     """
     # Split into individual key/value pairs
-    attrs = (s.strip() for s in attribute_str.split(","))
+    attrs = (s.strip() for s in re.split("[,;]", attribute_str))
     # Split each k/v pair into individual parts
     part_attrs = (
         attr.partition("=") if "=" in attr else (attr, None, True)
-        for attr in attrs)
+        for attr in attrs if attr)
     # Create dict of ints
     return {
         int(attr[0]): int(attr[2]) if not isinstance(attr[2], bool) else attr[2]
-        for attr in part_attrs
+        for attr in part_attrs if attr[0] != "ID"
     }
