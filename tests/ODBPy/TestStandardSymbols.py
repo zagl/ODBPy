@@ -18,12 +18,28 @@ class TestStandardSymbolParsing(object):
         assert_is_none(Square.Parse("r3.5"))
 
     def testRectangle(self):
-        assert_equal(Rectangle(60., 30.), Rectangle.Parse("r60x30"))
-        assert_equal(Rectangle(1., 2), Rectangle.Parse("r1x2"))
-        assert_equal(Rectangle(5.1, 3.33), Rectangle.Parse("r5.1x3.33"))
+        assert_equal(Rectangle(60., 30.), Rectangle.Parse("rect60x30"))
+        assert_equal(Rectangle(1., 2), Rectangle.Parse("rect1x2"))
+        assert_equal(Rectangle(5.1, 3.33), Rectangle.Parse("rect5.1x3.33"))
         assert_is_none(Rectangle.Parse("rabc"))
         assert_is_none(Rectangle.Parse("r3.5"))
         assert_is_none(Rectangle.Parse("r1x2x3"))
+
+    def testRoundedRectangle(self):
+        assert_equal(RoundedRectangle(60., 30., 5, [1, 3]), RoundedRectangle.Parse("rect60x30xr5x13"))
+        assert_equal(RoundedRectangle(60., 30., 5, [1, 2, 3, 4]), RoundedRectangle.Parse("rect60x30xr5"))
+        assert_is_none(RoundedRectangle.Parse("rectabc"))
+        assert_is_none(RoundedRectangle.Parse("rect3.5"))
+        assert_is_none(RoundedRectangle.Parse("rect1x2x3"))
+        assert_is_none(RoundedRectangle.Parse("rect1x2xc3"))
+
+    def testChamferedRectangle(self):
+        assert_equal(ChamferedRectangle(60., 30., 5, [1, 3]), ChamferedRectangle.Parse("rect60x30xc5x13"))
+        assert_equal(ChamferedRectangle(60., 30., 5, [1, 2, 3, 4]), ChamferedRectangle.Parse("rect60x30xc5"))
+        assert_is_none(ChamferedRectangle.Parse("rectabc"))
+        assert_is_none(ChamferedRectangle.Parse("rect3.5"))
+        assert_is_none(ChamferedRectangle.Parse("rect1x2x3"))
+        assert_is_none(ChamferedRectangle.Parse("rect1x2xr3"))
 
     def testOval(self):
         assert_equal(Oval(60., 30.), Oval.Parse("oval60x30"))

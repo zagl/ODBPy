@@ -35,7 +35,6 @@ def _parse_allfloat_corners(rgx, constr, s):
     # Assemble args list
     args = list(map(float, groups[:-1]))
     args.append(corners)
-    print(args)
     return constr(*args)
 
 
@@ -52,10 +51,19 @@ def _standard_symbol_factory(name, regex, field_names, parsefunc):
     return _cls
 
 Round = _standard_symbol_factory("Round", r"^r([\.\d]+)$", ["diameter"], _parse_allfloat)
+
 Square = _standard_symbol_factory("Square", r"^s([\.\d]+)$", ["side"], _parse_allfloat)
 
-Rectangle = _standard_symbol_factory("Rectangle", r"^r([\.\d]+)x([\.\d]+)$",
+Rectangle = _standard_symbol_factory("Rectangle", r"^rect([\.\d]+)x([\.\d]+)$",
     ["width", "height"], _parse_allfloat)
+
+RoundedRectangle = _standard_symbol_factory("RoundedRectangle",
+    r"^rect([\.\d]+)x([\.\d]+)xr([\.\d]+)(x[\.\d]+)?$",
+    ["width", "height", "corner_radius", "corners"], _parse_allfloat_corners)
+
+ChamferedRectangle = _standard_symbol_factory("ChamferedRectangle",
+    r"^rect([\.\d]+)x([\.\d]+)xc([\.\d]+)(x[\.\d]+)?$",
+    ["width", "height", "corner_radius", "corners"], _parse_allfloat_corners)
 
 Oval = _standard_symbol_factory("Oval", r"^oval([\.\d]+)x([\.\d]+)$", ["width", "height"], _parse_allfloat)
 
@@ -65,7 +73,6 @@ Diamond = _standard_symbol_factory("Diamond",
 Octagon = _standard_symbol_factory("Octagon",
     r"^oct([\.\d]+)x([\.\d]+)x([\.\d]+)$", ["width", "height", "corner_size"], _parse_allfloat)
 
-# TODO: Rounded and chamfered rectangle currently not supported
 RoundDonut = _standard_symbol_factory("RoundDonut",
     r"^donut_r([\.\d]+)x([\.\d]+)$", ["outer_diameter", "inner_diameter"], _parse_allfloat)
 
