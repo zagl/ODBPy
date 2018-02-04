@@ -14,10 +14,14 @@ def _parse_allfloat(rgx, constr, s):
     """
     Parse a string using a regex yielding only floats group
     """
+    s, _, unit = s.partition(" ")
     match = rgx.match(s)
     if match is None:
         return None
-    return constr(*map(float, match.groups()))
+    args = list(map(float, match.groups()))
+    if unit is not "":
+        args.append(unit)
+    return constr(*args)
 
 def _parse_allfloat_corners(rgx, constr, s):
     """
@@ -25,6 +29,7 @@ def _parse_allfloat_corners(rgx, constr, s):
     with the exception of the last group, being an optional corner
     group containing a list of corners
     """
+    s, _, unit = s.partition(" ")
     match = rgx.match(s)
     if match is None:
         return None
@@ -35,6 +40,8 @@ def _parse_allfloat_corners(rgx, constr, s):
     # Assemble args list
     args = list(map(float, groups[:-1]))
     args.append(corners)
+    if unit is not "":
+        args.append(unit)
     return constr(*args)
 
 
@@ -45,7 +52,8 @@ def _standard_symbol_factory(name, regex, field_names, parsefunc):
     a list of fields and one of the _parse_... parsers
     from this module
     """
-    _cls = namedtuple(name, field_names)
+    _cls = namedtuple(name, field_names + ["unit"])
+    _cls.__new__.__defaults__ = (None,) * len(_cls._fields)
     _cls.regex = re.compile(regex)
     _cls.Parse = functools.partial(parsefunc, _cls.regex, _cls)
     return _cls

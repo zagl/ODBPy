@@ -8,6 +8,8 @@ class TestStandardSymbolParsing(object):
     def testRound(self):
         assert_equal(Round(40.), Round.Parse("r40"))
         assert_equal(Round(3.5), Round.Parse("r3.5"))
+        assert_equal(Round(40., "I"), Round.Parse("r40 I"))
+        assert_equal(Round(40., "M"), Round.Parse("r40 M"))
         assert_is_none(Round.Parse("rabc"))
         assert_is_none(Round.Parse("s3.5"))
 
@@ -28,6 +30,8 @@ class TestStandardSymbolParsing(object):
     def testRoundedRectangle(self):
         assert_equal(RoundedRectangle(60., 30., 5, [1, 3]), RoundedRectangle.Parse("rect60x30xr5x13"))
         assert_equal(RoundedRectangle(60., 30., 5, [1, 2, 3, 4]), RoundedRectangle.Parse("rect60x30xr5"))
+        assert_equal(RoundedRectangle(60., 30., 5, [1, 2, 3, 4], "I"), RoundedRectangle.Parse("rect60x30xr5 I"))
+        assert_equal(RoundedRectangle(60., 30., 5, [1, 2, 3, 4], "M"), RoundedRectangle.Parse("rect60x30xr5 M"))
         assert_is_none(RoundedRectangle.Parse("rectabc"))
         assert_is_none(RoundedRectangle.Parse("rect3.5"))
         assert_is_none(RoundedRectangle.Parse("rect1x2x3"))
