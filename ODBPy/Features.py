@@ -4,10 +4,11 @@
 ODB++ feature info parser
 """
 from collections import namedtuple
+from .Units import linerecords_unit
 
 __all__ = ["FeatureInfo", "parse_feature_info"]
 
-class FeatureInfo(namedtuple("FeatureInfo", ["symbol_names", "attribute_names", "strings"])):
+class FeatureInfo(namedtuple("FeatureInfo", ["unit", "symbol_names", "attribute_names", "strings"])):
     def apply(self, attributes):
         """Apply the current feature info to a given attribute dictionary.
         This function is not content-aware and therefore"""
@@ -26,6 +27,7 @@ def parse_feature_map(elems):
 
 def parse_feature_info(linerecords):
     return FeatureInfo (
+        linerecords_unit(linerecords),
         parse_feature_map(linerecords["Feature symbol names"]),
         parse_feature_map(linerecords["Feature attribute names"]),
         parse_feature_map(linerecords["Feature attribute text strings"])
