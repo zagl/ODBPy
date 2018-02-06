@@ -10,6 +10,7 @@ from collections import namedtuple
 import functools
 from .Structures import HolePlating
 
+
 def _parse_allfloat(rgx, constr, s):
     """
     Parse a string using a regex yielding only floats group
@@ -22,6 +23,7 @@ def _parse_allfloat(rgx, constr, s):
     if unit is not "":
         args.append(unit)
     return constr(*args)
+
 
 def _parse_allfloat_corners(rgx, constr, s):
     """
@@ -57,6 +59,7 @@ def _standard_symbol_factory(name, regex, field_names, parsefunc):
     _cls.regex = re.compile(regex)
     _cls.Parse = functools.partial(parsefunc, _cls.regex, _cls)
     return _cls
+
 
 Round = _standard_symbol_factory("Round", r"^r([\.\d]+)$", ["diameter"], _parse_allfloat)
 
@@ -181,7 +184,6 @@ OvalThermal = _standard_symbol_factory("OvalThermal",
 OvalThermalOpenCorners = _standard_symbol_factory("OvalThermalOpenCorners",
     r"^o_tho([\.\d]+)x([\.\d]+)x([\.\d]+)x([\.\d]+)x([\.\d]+)x([\.\d]+)$",
     ["outer_width", "outer_height", "angle", "num_spokes", "gap", "line_width"], _parse_allfloat)
-
 
 Ellipse = _standard_symbol_factory("Ellipse",
     r"^el([\.\d]+)x([\.\d]+)$", ["width", "height"], _parse_allfloat)
