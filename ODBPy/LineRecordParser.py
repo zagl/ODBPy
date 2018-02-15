@@ -16,14 +16,14 @@ def filter_line_record_lines(lines):
         if line and line != "#"
     ]
 
-def read_raw_linerecords(filename):
+def read_raw_linerecords(odbpath, filename):
     "Read a .Z line record file and return only important lines in order"
     try: # Assume file-like object
         return filter_line_record_lines(filename.read().split("\n"))
     except AttributeError:
         open_fn = readZIPFileLines if filename.endswith(".Z") else readFileLines
         return filter_line_record_lines(
-            open_fn(filename))
+            open_fn(odbpath, filename))
 
 def group_by_section(lines):
     "Group a line record file by the section. Returns a dict containing lists."
@@ -38,6 +38,6 @@ def group_by_section(lines):
             groups[name].append(line)
     return dict(groups)
 
-def read_linerecords(filename):
+def read_linerecords(odbpath, filename):
     "Read a linerecord file and return a dict grouped by section"
-    return group_by_section(read_raw_linerecords(filename))
+    return group_by_section(read_raw_linerecords(odbpath, filename))

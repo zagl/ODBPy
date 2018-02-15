@@ -18,9 +18,9 @@ StructuredArray = namedtuple("StructuredArray", ["name", "attributes"])
 array_start_re = re.compile(r"(\w+)\s+\{")
 
 
-def read_structured_text(filename):
+def read_structured_text(odbpath, filename):
     "Run parse_structured_text() on the content of the given file"
-    return parse_structured_text(readFileLines(filename))
+    return parse_structured_text(readFileLines(odbpath, filename))
 
 def parse_structured_text(lines):
     """
@@ -56,11 +56,3 @@ def parse_structured_text(lines):
         arrays.append(current_array)
     return StructuredText(metadata, arrays)
 
-if __name__ == "__main__":
-    #Parse commandline arguments
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("file", help="The structured text file to red")
-    args = parser.parse_args()
-    #Perform check
-    print(read_structured_text(args.file))

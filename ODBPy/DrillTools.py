@@ -61,5 +61,8 @@ def parse_drill_tools(structured_text):
 
 def read_drill_tools(odbpath):
     "Read the drill tools from a given ODB++ directory"
-    stext = read_structured_text(os.path.join(odbpath, "steps/pcb/layers/through_drill/tools"))
+    stext = read_structured_text(
+        odbpath,
+        os.path.join("steps", "pcb", "layers", "through_drill", "tools")
+    )
     return parse_drill_tools(stext)

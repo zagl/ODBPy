@@ -16,8 +16,11 @@ __all__ = ["read_profile", "parse_profile", "Profile"]
 
 Profile = namedtuple("Profile", ["unit", "surfaces"])
 
-def read_profile(directory):
-    profile = read_linerecords(os.path.join(directory, "steps/pcb/profile"))
+def read_profile(odbpath):
+    profile = read_linerecords(
+        odbpath,
+        os.path.join("steps", "pcb", "profile")
+    )
     return parse_profile(profile)
 
 def parse_profile(linerecords):

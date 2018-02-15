@@ -18,13 +18,13 @@ class Layer(namedtuple("Layer", ["name", "type", "polarity", "index", "start", "
     A layer reference in a ODB++ dataset
     start,end = start and end layer name
     """
-    def read_features(self, directory):
+    def read_features(self, odbpath):
         """Read the layer feature file for the current layer from the given directory"""
-        return read_layer_features(directory, self.name)
+        return read_layer_features(odbpath, self.name)
 
-    def read_components(self, directory):
+    def read_components(self, odbpath):
         """Read the layer components file for the current layer from the given directory"""
-        return read_layer_components(directory, self.name)
+        return read_layer_components(odbpath, self.name)
 
 class LayerSet(list):
     """
@@ -108,7 +108,8 @@ def parse_layers(matrix):
         if array.name != "LAYER":
             continue
         layers.append(Layer(
-                array.attributes["NAME"].lower(), # DipTrace seems to use lowercase for directories
+                # DipTrace seems to use lowercase for directories
+                array.attributes["NAME"].lower(),
                 _layer_type_map[array.attributes["TYPE"]],
                 polarity_map[array.attributes["POLARITY"]],
                 int(array.attributes["ROW"]),
@@ -117,24 +118,15 @@ def parse_layers(matrix):
         ))
     return layers
 
-def read_layers(directory):
-    matrix = read_structured_text(os.path.join(directory, "matrix/matrix"))
+def read_layers(odbpath):
+    matrix = read_structured_text(odbpath, os.path.join("matrix", "matrix"))
     return parse_layers(matrix)
 
-def read_layer_components(directory, layer):
-    return read_linerecords(os.path.join(
-        directory, "steps", "pcb", "layers", layer, "components"))
+def read_layer_components(odbpath, layer):
+    return read_linerecords(odbpath, os.path.join(
+        "steps", "pcb", "layers", layer, "components"))
 
-def read_layer_features(directory, layer):
-    return read_linerecords(os.path.join(
-        directory, "steps", "pcb", "layers", layer, "features"))
+def read_layer_features(odbpath, layer):
+    return read_linerecords(odbpath, os.path.join(
+        "steps", "pcb", "layers", layer, "features"))
 
-
-if __name__ == "__main__":
-    #Parse commandline arguments
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("directory", help="The ODB++ directory")
-    args = parser.parse_args()
-    #Perform check
-    print(read_layers(args.directory))
