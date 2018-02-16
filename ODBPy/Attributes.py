@@ -37,6 +37,7 @@ def parse_attributes(attribute_str):
         for attr in attrs if attr)
     # Create dict of ints
     return {
-        int(attr[0]): int(attr[2]) if not isinstance(attr[2], bool) else attr[2]
+        int(attr[0]): ( int(attr[2]) if not "." in attr[2] else float(attr[2]))
+        if not isinstance(attr[2], bool) else attr[2]
         for attr in part_attrs if attr[0] != "ID"
     }
