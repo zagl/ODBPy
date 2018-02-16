@@ -43,7 +43,7 @@ def readFileLines(odbpath, filename, open_fn=open):
         if ext.lower() == ".gz" or ext.lower() == ".tgz":
             with tarfile.open(odbpath) as tar:
                 top = os.path.commonprefix(tar.getnames())
-                filepath = os.path.join(top, filename)
+                filepath = os.path.join(top, filename).replace(os.path.sep, "/")
                 binary_content = tar.extractfile(filepath).read()
                 try:
                     content = binary_content.decode("utf-8")
