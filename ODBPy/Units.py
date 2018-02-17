@@ -33,8 +33,10 @@ def linerecords_unit(linerecords):
         return match.group(1)
 
 _mm_factors = {
+    "M": 0.001,
     "MM": 1.0,
     "UM": 0.001,
+    "I": 0.0254,
     "IN": 25.4,
     "INCH": 25.4,
     "MIL": 0.0254

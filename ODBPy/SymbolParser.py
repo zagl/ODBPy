@@ -52,8 +52,7 @@ _user_symbol = namedtuple("User", ["name", "unit"])
 
 def parse_user_symbol(s):
     s, _, unit = s.partition(" ")
-    if unit == "":
-        unit = None
+    unit = "MM"
     return _user_symbol(s, unit)
 
 def parse_symbol_name(symbol_name):
