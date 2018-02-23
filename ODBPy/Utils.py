@@ -4,6 +4,7 @@ import gzip
 from zipfile import ZipFile
 import os
 import tarfile
+from .unlzw import unlzw
 
 __all__ = ["readFileLines", "readGZIPFileLines", "readZIPFileLines", "try_parse_number",
            "not_none", "const_false"]
@@ -44,7 +45,12 @@ def readFileLines(odbpath, filename, open_fn=open):
             with tarfile.open(odbpath) as tar:
                 top = os.path.commonprefix(tar.getnames())
                 filepath = os.path.join(top, filename).replace(os.path.sep, "/")
-                binary_content = tar.extractfile(filepath).read()
+                try:
+                    binary_content = tar.extractfile(filepath).read()
+                except KeyError:
+                    stream = tar.extractfile("{}.Z".format(filepath)).read()
+                    binary_content = unlzw(stream)
+
                 try:
                     content = binary_content.decode("utf-8")
                 except UnicodeDecodeError:
